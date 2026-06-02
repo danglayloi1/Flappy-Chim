@@ -7,14 +7,17 @@ public class PipeSpawnScript : MonoBehaviour
     public float spawnRate = 2;
     private float timer = 0;
     public float heightOffset = 8;
+    public LogicScript logic;
     void Start()
     {
+        logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
         spawnPipe();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (logic.gameIsPlaying == false) return;
         if (timer < spawnRate)
         {
             timer += Time.deltaTime;

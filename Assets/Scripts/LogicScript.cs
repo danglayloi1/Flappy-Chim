@@ -14,13 +14,17 @@ public class LogicScript : MonoBehaviour
     public GameObject chim;
     public GameObject pipeSpawner;
     public static bool showMenu = true;
-    public static bool gameIsPlaying = false;
+    public bool gameIsPlaying = false;
 
     public GameObject pauseScreen;
     public Sprite iconPause, iconPlay;
     public Button buttonPlayPause;
 
     public Button buttonHome;
+
+    public Collider2D chimCollider;
+    public Rigidbody2D chimBody;
+    public ChimCode chimScript;
 
     private void Start()
     {
@@ -92,7 +96,9 @@ public class LogicScript : MonoBehaviour
         gameIsPlaying = false;
         gameOverScreen.SetActive(true);
         buttonPlayPause.gameObject.SetActive(false);
-        Time.timeScale = 0f;
+        chimCollider.enabled = false;
+        chimBody.linearVelocity = Vector2.up * 15f;
+        chimScript.birdIsAlive = false;
     }
 
     public void pressPlayPause()

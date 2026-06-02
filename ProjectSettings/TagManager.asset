@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Logic
   - Object
+  - DeathBorder
+  - Menu
   layers:
   - Default
   - TransparentFX

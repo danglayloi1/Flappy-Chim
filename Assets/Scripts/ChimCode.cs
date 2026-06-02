@@ -28,11 +28,24 @@ public class ChimCode : MonoBehaviour
         {
             anim.SetBool("isFlying", false);
         }
+
+        if (transform.position.y < -30)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         logic.gameOver();
         birdIsAlive = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("DeathBorder"))
+        {
+            logic.gameOver();
+        }
     }
 }
