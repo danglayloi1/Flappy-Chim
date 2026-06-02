@@ -7,11 +7,13 @@ public class ChimCode : MonoBehaviour
     public float flapStrength;
     public LogicScript logic;
     public bool birdIsAlive = true;
+    Animator anim;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -20,6 +22,11 @@ public class ChimCode : MonoBehaviour
         if (Keyboard.current.spaceKey.wasPressedThisFrame && birdIsAlive)
         {
             myRigidBody.linearVelocity = Vector2.up * flapStrength;
+            anim.SetBool("isFlying", true);
+        }
+        else
+        {
+            anim.SetBool("isFlying", false);
         }
     }
 
