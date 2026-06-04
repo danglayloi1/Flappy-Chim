@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,6 +27,11 @@ public class LogicScript : MonoBehaviour
     public Rigidbody2D chimBody;
     public ChimCode chimScript;
 
+    public AudioClip deathSound;
+    public AudioClip scoreSound;
+
+    public TMP_Text bestScoreText;
+
     private void Start()
     {
         if (showMenu == true)
@@ -36,9 +42,14 @@ public class LogicScript : MonoBehaviour
             pipeSpawner.SetActive(false);
             menuPanel.SetActive(true);
             scoreText.enabled = false;
+
+            int bestScore = PlayerPrefs.GetInt("BestScore", 0);
+            bestScoreText.text = "Best: " + bestScore;
+            bestScoreText.enabled = true;
         }
         else
         {
+            bestScoreText.enabled = false;
             startGame();
         }
     }
@@ -69,6 +80,10 @@ public class LogicScript : MonoBehaviour
 
     public void addScore(int scoreToAdd)
     {
+        AudioSource.PlayClipAtPoint(
+        scoreSound,
+        Camera.main.transform.position
+        );
         playerScore += scoreToAdd;
         scoreText.text = playerScore.ToString();
     }
@@ -99,6 +114,18 @@ public class LogicScript : MonoBehaviour
         chimCollider.enabled = false;
         chimBody.linearVelocity = Vector2.up * 15f;
         chimScript.birdIsAlive = false;
+
+        AudioSource.PlayClipAtPoint(
+        deathSound,
+        Camera.main.transform.position
+        );
+
+        int bestScore = PlayerPrefs.GetInt("BestScore", 0);
+        if (playerScore > bestScore)
+        {
+            PlayerPrefs.SetInt("BestScore", playerScore);
+            PlayerPrefs.Save();
+        }
     }
 
     public void pressPlayPause()

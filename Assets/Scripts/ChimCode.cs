@@ -9,6 +9,8 @@ public class ChimCode : MonoBehaviour
     public bool birdIsAlive = true;
     Animator anim;
 
+    public AudioClip flapSound;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,6 +25,11 @@ public class ChimCode : MonoBehaviour
         {
             myRigidBody.linearVelocity = Vector2.up * flapStrength;
             anim.SetBool("isFlying", true);
+
+            AudioSource.PlayClipAtPoint(
+            flapSound,
+            Camera.main.transform.position
+            );
         }
         else
         {
