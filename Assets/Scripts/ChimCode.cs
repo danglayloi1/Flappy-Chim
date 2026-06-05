@@ -21,7 +21,11 @@ public class ChimCode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame && birdIsAlive)
+        if (
+            (Keyboard.current.spaceKey.wasPressedThisFrame ||
+            Keyboard.current.upArrowKey.wasPressedThisFrame ||
+            Mouse.current.leftButton.wasPressedThisFrame)
+            && birdIsAlive)
         {
             myRigidBody.linearVelocity = Vector2.up * flapStrength;
             anim.SetBool("isFlying", true);

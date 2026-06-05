@@ -4,34 +4,31 @@ public class PipeSpawnScript : MonoBehaviour
 {
 
     public GameObject pipe;
-    public float spawnRate = 2;
-    private float timer = 0;
+    public float pipeDistance;
     public float heightOffset = 8;
     public LogicScript logic;
+
+    private GameObject lastPipe;
+
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
-        spawnPipe();
+        lastPipe = spawnPipe();
     }
 
     // Update is called once per frame
     void Update()
     {
         if (logic.gameIsPlaying == false) return;
-        if (timer < spawnRate)
+        if (lastPipe == null || lastPipe.transform.position.x <= transform.position.x - pipeDistance)
         {
-            timer += Time.deltaTime;
-        }
-        else
-        {
-            spawnPipe();
-            timer = 0;
+            lastPipe = spawnPipe();
         }
     }
-    void spawnPipe()
+    GameObject spawnPipe()
     {
         float lowestPoint = transform.position.y - heightOffset;
         float highestPoint = transform.position.y + heightOffset;
-        Instantiate(pipe, new Vector3(transform.position.x, Random.Range(lowestPoint, highestPoint), 0), transform.rotation);
+        return Instantiate(pipe, new Vector3(transform.position.x, Random.Range(lowestPoint, highestPoint), 0), transform.rotation);
     }
 }

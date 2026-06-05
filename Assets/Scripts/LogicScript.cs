@@ -1,10 +1,13 @@
+using System.Collections;
 using TMPro;
 using UnityEditor;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
+
 
 public class LogicScript : MonoBehaviour
 {
@@ -31,6 +34,22 @@ public class LogicScript : MonoBehaviour
     public AudioClip scoreSound;
 
     public TMP_Text bestScoreText;
+    public TMP_Text newBestText;
+
+    IEnumerator Shake()
+    {
+        Vector3 pos = Camera.main.transform.position;
+
+        for (int i = 0; i < 8; i++)
+        {
+            Camera.main.transform.position =
+                pos + (Vector3)Random.insideUnitCircle * 0.1f;
+
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        Camera.main.transform.position = pos;
+    }
 
     private void Start()
     {
@@ -106,6 +125,36 @@ public class LogicScript : MonoBehaviour
         pipeSpawner.SetActive(true);
     }
 
+    private IEnumerator NewBestEffect()
+    {
+        newBestText.gameObject.SetActive(true);
+
+        float duration = 0.4f;
+        float elapsed = 0f;
+        Vector3 originalPos = newBestText.transform.localPosition;
+        Color flashColor = new Color(1f, 0.9f, 0f); // yellow
+        Color originalColor = newBestText.color;
+
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+
+            // shake: random offset that calms down over time
+            float intensity = (1f - t) * 8f;
+            newBestText.transform.localPosition = originalPos + (Vector3)Random.insideUnitCircle * intensity;
+
+            // flash: yellow -> original
+            newBestText.color = Color.Lerp(flashColor, originalColor, t);
+
+            elapsed += Time.unscaledDeltaTime; // unscaled in case Time.timeScale is 0
+            yield return null;
+        }
+
+        // reset to clean state
+        newBestText.transform.localPosition = originalPos;
+        newBestText.color = originalColor;
+    }
+
     public void gameOver()
     {
         gameIsPlaying = false;
@@ -125,7 +174,10 @@ public class LogicScript : MonoBehaviour
         {
             PlayerPrefs.SetInt("BestScore", playerScore);
             PlayerPrefs.Save();
+            StartCoroutine(NewBestEffect());
         }
+
+        StartCoroutine(Shake());
     }
 
     public void pressPlayPause()

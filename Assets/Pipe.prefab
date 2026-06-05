@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   logic: {fileID: 0}
-  moveSpeed: 10
+  baseSpeed: 15
   deadZone: -45
 --- !u!1 &2079271079019390150
 GameObject:

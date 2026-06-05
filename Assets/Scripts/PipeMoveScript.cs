@@ -4,7 +4,7 @@ public class PipeMoveScript : MonoBehaviour
 {
 
     public LogicScript logic;
-    public float moveSpeed;
+    public float baseSpeed;
     public float deadZone = -45;
     void Start()
     {
@@ -15,6 +15,8 @@ public class PipeMoveScript : MonoBehaviour
     void Update()
     {
         if (logic.gameIsPlaying == false) return;
+        int playerScore = logic.playerScore;
+        float moveSpeed = baseSpeed + (playerScore * 0.3f);
         transform.position = transform.position + (Vector3.left * moveSpeed) * Time.deltaTime;
 
         if (transform.position.x < deadZone)
